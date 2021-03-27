@@ -1,8 +1,25 @@
 const axios = require('axios');
 
 const gaming = [14]          // Gaming nodes
-const botswebdb = [17]       // Bots, Websites and Databases nodes
+const botswebdb = [17, 16, 15, 11]       // Bots, Websites and Databases nodes
 const storage = [13]         // Storage nodes
+
+/*
+Node 1   : 9
+Node 2   : 3
+Node 3   : 5
+Node 4   : 8
+Node 5   : 10
+Node 6   : 11
+Node 7   : 12
+Node 8   : 14
+Node 9   : 15
+Node 10  : 16
+Node 11  : 17
+Node 12  : 18
+Node 13  : 19
+Node 14  : 20
+*/
 
 const CAPSNUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 var getPassword = () => {
@@ -100,9 +117,9 @@ list.nodejs = (serverName, userID) => ({
     "name": serverName,
     "user": userID,
     "nest": 5,
-    "egg": 16,
+    "egg": 50,
     "docker_image": "quay.io/parkervcp/pterodactyl-images:debian_nodejs-12",
-    "startup": `if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == "1" ]]; then git pull; fi && /usr/local/bin/npm install --production --python=/usr/bin/python3 && /usr/local/bin/node /home/container/{{BOT_JS_FILE}}`,
+    "startup": `/usr/local/bin/npm i && /usr/local/bin/node /home/container/{{BOT_JS_FILE}}`,
     "limits": {
         "memory": 0,
         "swap": 0,
@@ -283,7 +300,7 @@ list.paper = (serverName, userID) => ({
     "environment": {
         "MINECRAFT_VERSION": "latest",
         "SERVER_JARFILE": "server.jar",
-        "DL_PATH": "https://papermc.io/api/v2/projects/paper/versions/1.16.4/builds/408/downloads/paper-1.16.4-408.jar",
+        "DL_PATH": "https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/503/downloads/paper-1.16.5-503.jar",
         "BUILD_NUMBER": "latest"
     },
     "feature_limits": {

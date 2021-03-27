@@ -25,7 +25,7 @@ let stats = {
     },
     node6: {
         serverID: '8565f2e0',
-        IP: '194.146.44.129'
+        IP: '51.195.229.146'
     },
     node7: {
         serverID: '94082df3',
@@ -89,31 +89,19 @@ setInterval(() => {
                 is_vm_online: true
             });
         }).catch(error => {
-
-            axios({
-                url: 'http://' + data.IP + ':999/random',
-                timeout: 1500,
-            }).then(x => {
-
-            }).catch(x => {
-
-                if (x.response != null) {
-                    nodeStatus.set(node, {
-                        status: false,
-                        is_vm_online: true
-                    });
-                } else {
-                    nodeStatus.set(node, {
-                        status: false,
-                        is_vm_online: false
-                    });
-                }
-            });
+            ping2.ping(data.IP, 22)
+                .then(() => nodeStatus.set(node, {
+                    status: false,
+                    is_vm_online: true
+                }))
+                .catch((e) => nodeStatus.set(node, {
+                    status: false,
+                    is_vm_online: false
+                }));
         })
     }
 
     //Server limit
-
 
     //Node servers checker
     axios({
@@ -195,6 +183,24 @@ setInterval(() => {
             status: true
         }))
         .catch((e) => nodeStatus.set("dbhdb", {
+            status: false
+        }));
+
+    //UK VM Storage 1
+    ping2.ping('178.159.3.233', 22)
+        .then(() => nodeStatus.set("ukvms1", {
+            status: true
+        }))
+        .catch((e) => nodeStatus.set("ukvms1", {
+            status: false
+        }));
+
+    //Backup Storage
+    ping2.ping('176.31.125.135', 22)
+        .then(() => nodeStatus.set("backups1", {
+            status: true
+        }))
+        .catch((e) => nodeStatus.set("backups1", {
             status: false
         }));
 

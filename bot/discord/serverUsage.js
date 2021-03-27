@@ -1,7 +1,13 @@
 let nstatus = {
-    "Nodes": [{
+    "Public": [{
         name: 'Node-1',
         data: 'Node1'
+    }, {
+        name: 'Node-2',
+        data: 'Node2'
+    }, {
+        name: 'Node-3',
+        data: 'Node3'
     }, {
         name: 'Node-4',
         data: 'Node4'
@@ -11,9 +17,6 @@ let nstatus = {
     }, {
         name: 'Node-6',
         data: 'Node6'
-    }, {
-        name: 'Node-7',
-        data: 'node7'
     }, {
         name: 'Node-8',
         data: 'Node8'
@@ -27,65 +30,29 @@ let nstatus = {
         name: 'Node-11',
         data: 'Node11'
     }, {
-        name: 'Node-12 (Not Released)',
+        name: 'Node-12',
         data: 'Node12'
     }, {
-        name: 'Node-13 (Not Released)',
+        name: 'Node-13',
         data: 'Node13'
     }, {
         name: 'Node-14',
         data: 'Node14'
     }],
 
-    "Storage Servers": [{
+    "Donator Nodes": [{
+        name: 'Node-7',
+        data: 'node7'
+    }],
+
+    "Storage Nodes": [{
         name: 'Storage-1',
         data: 'storage1'
-    }, {
-        name: 'UK VM Storage 1',
-        data: 'ukvms1'
-    }, {
-        name: 'Backup Storage',
-        data: 'backups1'
-    }],
-
-    "Panel": [{
-        name: 'US Panel 1',
-        data: 'panelus1'
-    }, {
-        name: 'MySQL Database',
-        data: 'dbhdb'
-    }],
-
-    "VPS Hosting Servers": [{
-        name: 'Server 1',
-        data: 'vps-server-01'
     }],
 
     "Dan's Panel": [{
-        name: 'Panel',
-        data: 'private.danbot.host'
-    }, {
         name: 'Node-1',
         data: 'dan-node1'
-    }],
-
-    "LavaLink": [{
-        name: 'Lava 1 (RateLimit)',
-        data: 'lava.danbot.host'
-    }, {
-        name: 'Lava 2',
-        data: 'lava2.danbot.host'
-    }],
-
-    "Misc": [{
-        name: 'Mail Server',
-        data: 'mail.danbot.host'
-    }, {
-        name: 'Reverse Proxy',
-        data: '63.141.228.92'
-    }, {
-        name: 'Animal API',
-        data: 'api.danbot.host'
     }]
 }
 
@@ -96,15 +63,10 @@ let parse = async () => {
         let temp = [];
         for (let d of data) {
 
-            let da = nodeStatus.get(d.data.toLowerCase());
-
-            da = (da.status === true ? ('🟢 Online') : ((da.is_vm_online == null ? "🔴 **Offline**" : ((da.is_vm_online === true ? "🟠 Wings" : "🔴 **VM**") + ' Outage'))))
+            let stats = ((title == "Public" && d.name.toLowerCase().includes('node') == true) ? nodeData.get(d.data) : null);
 
 
-            // if(nodeStatus.get(d.data).is_vm_online != null && nodeStatus.get('node1').is_vm_online === false && nodeStatus.get('node2').is_vm_online === false && nodeStatus.get('node5').is_vm_online === false, nodeStatus.get('node7').is_vm_online === false)
-            //    da = '🔴 Network Outage'
-
-            temp.push(`**${d.name}:** ${da}`)
+            temp.push(`**${d.name}:** ${stats != null ? `**CPU**: ${stats.cpuload}, **RAM**: ${stats.memused} / ${stats.memtotal}, **SSD**: ${stats.diskused} / ${stats.disktotal}` : ''}`)
         }
 
         toRetun[title] = temp;
