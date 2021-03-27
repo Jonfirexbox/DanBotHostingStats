@@ -1,51 +1,56 @@
 let nstatus = {
-    "Nodes": [{
+    "Public Panel": [{
+        name: 'Panel',
+        data: 'panel.danbot.host'
+    }, {
         name: 'Node-1',
-        data: 'Node1'
+        data: 'node1'
+    }, {
+        name: 'Node-2',
+        data: 'node2'
+    }, {
+        name: 'Node-3',
+        data: 'node3'
     }, {
         name: 'Node-4',
-        data: 'Node4'
+        data: 'node4'
     }, {
         name: 'Node-5',
-        data: 'Node5'
+        data: 'node5'
     }, {
         name: 'Node-6',
-        data: 'Node6'
-    }, {
-        name: 'Node-7',
-        data: 'node7'
+        data: 'node6'
     }, {
         name: 'Node-8',
-        data: 'Node8'
+        data: 'node8'
     }, {
         name: 'Node-9',
-        data: 'Node9'
+        data: 'node9'
     }, {
         name: 'Node-10',
-        data: 'Node10'
+        data: 'node10'
     }, {
         name: 'Node-11',
-        data: 'Node11'
+        data: 'node11'
     }, {
-        name: 'Node-12 (Not Released)',
-        data: 'Node12'
+        name: 'Node-12',
+        data: 'node12'
     }, {
-        name: 'Node-13 (Not Released)',
-        data: 'Node13'
+        name: 'Node-13',
+        data: 'node13'
     }, {
         name: 'Node-14',
-        data: 'Node14'
+        data: 'node14'
     }],
 
-    "Storage Servers": [{
+    "Donator Nodes": [{
+        name: 'Node-7',
+        data: 'node7'
+    }],
+
+    "Storage Nodes": [{
         name: 'Storage-1',
         data: 'storage1'
-    }, {
-        name: 'UK VM Storage 1',
-        data: 'ukvms1'
-    }, {
-        name: 'Backup Storage',
-        data: 'backups1'
     }],
 
     "Panel": [{
@@ -56,11 +61,6 @@ let nstatus = {
         data: 'dbhdb'
     }],
 
-    "VPS Hosting Servers": [{
-        name: 'Server 1',
-        data: 'vps-server-01'
-    }],
-
     "Dan's Panel": [{
         name: 'Panel',
         data: 'private.danbot.host'
@@ -69,15 +69,13 @@ let nstatus = {
         data: 'dan-node1'
     }],
 
-    "LavaLink": [{
-        name: 'Lava 1 (RateLimit)',
+    "Misc": [{
+        name: 'Lavalink 1',
         data: 'lava.danbot.host'
     }, {
-        name: 'Lava 2',
+        name: 'Lavalink 2',
         data: 'lava2.danbot.host'
-    }],
-
-    "Misc": [{
+    }, {
         name: 'Mail Server',
         data: 'mail.danbot.host'
     }, {
@@ -92,16 +90,29 @@ let nstatus = {
 let parse = async () => {
     let toRetun = {};
 
+    //let PubNodeStatus;
+
+    // await axios({
+    //     url: 'http://localhost:3001',
+    //     method: 'GET',
+    //     followRedirect: true,
+    //     maxRedirects: 5,
+    // }).then(x => {
+    //     PubNodeStatus = x.data;
+    // }).catch(err => {
+    //     PubNodeStatus = null;
+    // })
+
     for (let [title, data] of Object.entries(nstatus)) {
         let temp = [];
         for (let d of data) {
 
-            let da = nodeStatus.get(d.data.toLowerCase());
+            let da = nodeStatus.get(d.data);
 
-            da = (da.status === true ? ('🟢 Online') : ((da.is_vm_online == null ? "🔴 **Offline**" : ((da.is_vm_online === true ? "🟠 Wings" : "🔴 **VM**") + ' Outage'))))
+            da = (da.status === true ? ('🟢 Online') : ((da.is_vm_online == null ? "🔴 Offline" : ((da.is_vm_online === true ? "🟠 Wings" : "🔴 VM") + ' Outage'))))
 
 
-            // if(nodeStatus.get(d.data).is_vm_online != null && nodeStatus.get('node1').is_vm_online === false && nodeStatus.get('node2').is_vm_online === false && nodeStatus.get('node5').is_vm_online === false, nodeStatus.get('node7').is_vm_online === false)
+           // if(nodeStatus.get(d.data).is_vm_online != null && nodeStatus.get('node1').is_vm_online === false && nodeStatus.get('node2').is_vm_online === false && nodeStatus.get('node5').is_vm_online === false, nodeStatus.get('node7').is_vm_online === false)
             //    da = '🔴 Network Outage'
 
             temp.push(`**${d.name}:** ${da}`)
@@ -121,18 +132,18 @@ let getEmbed = async () => {
         desc = `${desc}**__${title}:__**\n${d.join('\n')}\n\n`
     }
 
-    date = new Date();
+  date = new Date();
     var hr;
-    monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    if (date.getHours() < 10) {
+monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    if(date.getHours() < 10) {
         hr = `0${date.getHours()}`;
     }
     else {
         hr = date.getHours();
     }
 
-    var dateString = "Updated at " + hr + ":" + ("00" + date.getMinutes()).slice(-2) + " (GMT) on "
-        + date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
+var dateString = "Updated at " + hr + ":" + ("00" + date.getMinutes()).slice(-2) + " (GMT) on "
+    + date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
 
     let embed = new Discord.MessageEmbed()
         .setTitle('Danbot Hosting Status').setFooter(dateString)

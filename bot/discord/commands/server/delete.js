@@ -1,11 +1,6 @@
 const axios = require('axios');
 
 exports.run = async (client, message, args) => {
-
-
-    // uncomment this line if shit goes wrong.
-    // if (!message.channel.name.includes('ticket')) return message.channel.send('this is currently disabled')
-
     if (client.cooldown[message.author.id] == null) {
         client.cooldown[message.author.id] = {
             nCreate: null,
@@ -15,20 +10,15 @@ exports.run = async (client, message, args) => {
     }
 
     if (client.cooldown[message.author.id].delete > Date.now()) {
-        message.reply(`You're currently on cooldown, please wait ${humanizeDuration(client.cooldown[message.author.id].delete - Date.now(), { round: true })}`)
+        message.reply(`You're currently on cooldown, please wait ${humanizeDuration(client.cooldown[message.author.id].delete - Date.now(), {round: true})}`)
         return;
     }
     client.cooldown[message.author.id].delete = Date.now() + (3 * 1000);
+
     //delete server things
     if (!args[1]) {
         message.channel.send('Command format: `' + config.DiscordBot.Prefix + 'server delete serveridhere`')
     } else {
-
-        if (args[1].match(/[0-9a-z]+/i) == null)
-            return message.channel.send("lol only use english characters.");
-
-        args[1] = args[1].match(/[0-9a-z]+/i)[0];
-
         message.channel.send('Checking server `' + args[1] + '`\nPlease allow me 2seconds to fetch this.').then((msg) => {
             axios({
                 url: "https://panel.danbot.host" + "/api/application/users/" + userData.get(message.author.id).consoleID + "?include=servers",
@@ -52,8 +42,7 @@ exports.run = async (client, message, args) => {
                         } else {
 
                             if (output.attributes.user === userData.get(message.author.id).consoleID) {
-                                msg.edit('Are you sure you want to delete `' + output.attributes.name.split('@').join('@​') //uses an invisible character (U+200B) after the @
-                                + '`?\nPlease type `confirm` to delete this server. You have 1min until this will expire \n\n**You can not restore the server once it has been deleted and/or its files**')
+                                msg.edit('Are you sure you want to delete `' + output.attributes.name + '`?\nPlease type `confirm` to delete this server. You have 1min until this will expire \n\n**You can not restore the server once it has been deleted and/or its files**')
                                 const collector = await message.channel.createMessageCollector(m => m.author.id === message.author.id, {
                                     time: 60000,
                                     max: 2

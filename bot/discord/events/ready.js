@@ -1,7 +1,6 @@
 const exec = require('child_process').exec;
 const axios = require('axios');
 const nstatus = require('../serverStatus');
-const nUsage = require('../serverUsage');
 global.snipes = new Discord.Collection();
 const db = require("quick.db");
 const pretty = require('prettysize');
@@ -23,7 +22,7 @@ module.exports = async (client) => {
     // }
 
     let checkNicks = () => {
-        guild.members.cache.filter(member => ['!', '`', '#', "'", '-', '.', '_', '"', '+', '*', '£', "$", '%', '^', "&", '(', ')', '>', '<', '[', ']', ','].some(r => member.displayName.startsWith(r))).forEach(x => {
+        guild.members.cache.filter(member => ['!', '`', '#', "'", '-', '.', '_', '"', '+', '*', '£', "$", '%', '^', "&", '(', ')', '>', '<', '[', ']'].some(r => member.displayName.startsWith(r))).forEach(x => {
             x.setNickname('⚠️HOISTER ALERT ⚠️');
         })
     }
@@ -99,21 +98,6 @@ module.exports = async (client) => {
         let channel = client.channels.cache.get("757949242495991918");
         setInterval(async () => {
             let embed = await nstatus.getEmbed();
-
-            let messages = await channel.messages.fetch({
-                limit: 10
-            })
-            messages = messages.filter(x => x.author.id === client.user.id).last();
-            if (messages == null) channel.send(embed)
-            else messages.edit(embed)
-
-        }, 15000)
-    }
-
-    if (enabled.NodeStats === true) {
-        let channel = client.channels.cache.get("797438893891911681");
-        setInterval(async () => {
-            let embed = await nUsage.getEmbed();
 
             let messages = await channel.messages.fetch({
                 limit: 10

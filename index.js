@@ -21,7 +21,6 @@ const hbs = require('hbs');
 const favicon = require('serve-favicon');
 const pat = require("path");
 app.use(favicon(pat.join(__dirname, 'views', 'favicon.ico')))
-const proxy = require('express-http-proxy');
 
 //Animal API app
 const animalapp = express();
@@ -65,10 +64,7 @@ global.nodeStatus = new db.table("nodeStatus");   //Node status. Online or offli
 global.userPrem = new db.table("userPrem");       //Premium user data, Donated, Boosted, Total
 global.nodeServers = new db.table("nodeServers"); //Server count for node limits to stop nodes becoming overloaded
 global.client = new Discord.Client({
-  restTimeOffset: 0,
-  disableMentions: 'everyone',
-  restWsBridgetimeout: 100,
-  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+  disableEveryone: true
 });
 global.bot = client;
 global.suggestionLog = new Discord.WebhookClient(config.DiscordSuggestions.channelID, config.DiscordSuggestions.channelID)
@@ -203,7 +199,7 @@ server.listen(PORT, function () {
 //Fetch node data
 global.nodeData = new db.table("nodeData")
 setInterval(() => {
-  for (i = 1; i < 15; i++) {
+  for (i = 1; i < 11; i++) {
     axios({
       url: "http://n" + i + ".danbot.host:999/stats",
       method: 'GET',
@@ -306,14 +302,6 @@ app.use("/stats", statsRoute);
 app.use("/me", meRoute);
 app.use("/admin", adminRoute);
 app.use("/external", externalRoute);
-
-app.get('/.htaccess', (req, res) => {
-  res.sendFile('./.htaccess', { root: __dirname })
-})
-
-app.get('/arc-sw.js', (req, res) => {
-  res.sendFile('./util//arc-sw.js', { root: __dirname });
-});
 
 app.get("/user/:ID", async (req, res) => {
   let user = req.params.ID;
