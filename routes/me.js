@@ -2,6 +2,7 @@
 const ms = require('ms')
 const Router = require("express").Router();
 const db = require("quick.db");
+const axios = require("axios");
 const isSnowflake = require(process.cwd() + "/util/isSnowflake.js");
 
 Router.get("/", checkAuth, (req, res) => {
@@ -11,6 +12,38 @@ Router.get("/", checkAuth, (req, res) => {
     bots,
     db
   });
+});
+
+Router.get("/servers", checkAuth, (req, res) => {
+  var arr = [];
+  axios({
+    url: "https://panel.danbot.host" + "/api/application/users/" + userData.get(req.user.id).consoleID + "?include=servers",
+    method: 'GET',
+    followRedirect: true,
+    maxRedirects: 5,
+    headers: {
+      'Authorization': 'Bearer ' + config.Pterodactyl.apikey,
+      'Content-Type': 'application/json',
+      'Accept': 'Application/vnd.pterodactyl.v1+json',
+    }
+  }).then(response => {
+    const preoutput = response.data.attributes.relationships.servers.data
+    arr.push(...preoutput)
+    setTimeout(async () => {
+      console.log(arr)
+      setTimeout(() => {
+        var clean = arr.map(e => e.attributes.container)
+        console.log(clean)
+        res.render("me/servers.ejs", {
+          user: req.isAuthenticated() ? req.user : null,
+            table: arr,
+          db
+        });
+        //console.log(output)
+      }, 500)
+    }, 5000)
+  });
+
 });
 
 Router.get("/form/new-server", checkAuth, (req, res) => {

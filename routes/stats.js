@@ -3,12 +3,24 @@ const db = require("quick.db");
 const isSnowflake = require(process.cwd() + "/util/isSnowflake.js");
 
 Router.get("/", (req, res) => {
-  let items = nodeData.fetch('');
-  let filteredItems = items.filter(i => i.state === "running");
-
+  let n1 = [ nodeData.fetch('Node1') ]
+  let n2 = [ nodeData.fetch('Node2') ]
+  let n3 = [ nodeData.fetch('Node3') ]
+  let n4 = [ nodeData.fetch('Node4') ]
+  let n5 = [ nodeData.fetch('Node5') ]
+  let n6 = [ nodeData.fetch('Node6') ]
+  let n7 = [ nodeData.fetch('Node7') ]
+  let n8 = [ nodeData.fetch('Node8') ]
+  let n9 = [ nodeData.fetch('Node9') ]
+  let n10 = [ nodeData.fetch('Node10') ]
+  let n11 = [ nodeData.fetch('Node11') ]
+  let n12 = [ nodeData.fetch('Node12') ]
+  let n13 = [ nodeData.fetch('Node13') ]
+  let n14 = [ nodeData.fetch('Node14') ]
+  let data = n1.concat(n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14);
   res.render('stats.ejs', {
-    table: filteredItems,
-    user: req.isAuthenticated() ? req.user : null, bots, db
+    table: data,
+    user: req.isAuthenticated() ? req.user : null
   })
 });
 
