@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const gaming = [14]          // Gaming nodes
-const botswebdb = [20, 11, 15, 16, 17]       // Bots, Websites and Databases nodes
+const botswebdb = [11, 15, 16, 17, 18, 19, 20, 22]       // Bots, Websites and Databases nodes
 const storage = [13]         // Storage nodes
 
 /*
@@ -19,6 +19,10 @@ Node 11  : 17
 Node 12  : 18
 Node 13  : 19
 Node 14  : 20
+Node 15  : 21
+Node 16  : 22
+Node 17  : 24
+Node 18  : 25
 */
 
 const CAPSNUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -277,12 +281,79 @@ list.storage = (serverName, userID) => ({
 
 Minecraft Servers
 
+Spigot
+Waterfall
 Paper
 Forge
 Bedrock
 PocketMineMP
 
 */
+list.spigot = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 1,
+    "egg": 58,
+    "docker_image": "quay.io/pterodactyl/core:java-11\n",
+    "startup": 'java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}',
+    "limits": {
+        "memory": 2048,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {
+        "SERVER_JARFILE": "server.jar",
+        "DL_PATH": null,
+        "DL_VERSION": "latest"
+    },
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": gaming,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
+list.waterfall = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 1,
+    "egg": 57,
+    "docker_image": "quay.io/pterodactyl/core:java-11\n",
+    "startup": 'java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}',
+    "limits": {
+        "memory": 2048,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {
+        "MINECRAFT_VERSION": "latest",
+        "SERVER_JARFILE": "waterfall.jar",
+        "DL_LINK": null,
+        "BUILD_NUMBER": "latest"
+    },
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": gaming,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
 list.paper = (serverName, userID) => ({
     "name": serverName,
     "user": userID,
@@ -708,10 +779,40 @@ list.arkse = (serverName, userID) => ({
 
 Voice Servers
 
+Lavalink
 TeamSpeak 3
 Mumble
 
 */
+list.lavalink = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 3,
+    "egg": 59,
+    "docker_image": "quay.io/parkervcp/pterodactyl-images:debian_openjdk-13",
+    "startup": `java -jar Lavalink.jar`,
+    "limits": {
+        "memory": 0,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {
+    },
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": botswebdb,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
 list.ts3 = (serverName, userID) => ({
     "name": serverName,
     "user": userID,
@@ -727,8 +828,9 @@ list.ts3 = (serverName, userID) => ({
         "cpu": 0
     },
     "environment": {
-        "TS_VERSION": "3.12.1",
-        "FILE_TRANSFER": "30033"
+        "TS_VERSION": "latest",
+        "FILE_TRANSFER": "30033",
+        "QUERY_PORT": "10011"
     },
     "feature_limits": {
         "databases": 2,
@@ -780,9 +882,201 @@ list.mumble = (serverName, userID) => ({
 
 SteamCMD Servers
 
+Barotrauma
+Avorion
+Assetto Corsa
+Arma 3
+7 Days to die
 Rust
 
 */
+list.barotrauma = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 4,
+    "egg": 56,
+    "docker_image": "quay.io/parkervcp/pterodactyl-images:ubuntu_source",
+    "startup": './DedicatedServer -batchmode',
+    "limits": {
+        "memory": 2048,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {},
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": gaming,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
+list.avorion = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 4,
+    "egg": 55,
+    "docker_image": "quay.io/pterodactyl/core:source",
+    "startup": './server.sh --galaxy-name \\"{{GALAXY_NAME}}\\" --admin {{ADMIN_ID}} --datapath galaxy --port {{SERVER_PORT}} --query-port {{QUERY_PORT}} --steam-master-port {{STEAM_MASTER_PORT}} --steam-query-port {{STEAM_QUERY_PORT}} --max-players {{MAX_PLAYERS}} --difficulty {{DIFFICULTY}} --collision-damage {{COLLISION_DMG}} --save-interval {{SAVE_INTERVAL}} --same-start-sector {{SAME_START_SECTOR}} --server-name \\"{{SERVER_NAME}}\\" --threads {{GAME_THREADS}} --listed {{SERVER_LISTED}}',
+    "limits": {
+        "memory": 2048,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {
+        "GALAXY_NAME": "Avorion",
+        "SERVER_NAME": "DBH hosted Avorion Server",
+        "ADMIN_ID": "0",
+        "MAX_PLAYERS": "10",
+        "DIFFICULTY": "0",
+        "COLLISION_DMG": "1",
+        "SAVE_INTERVAL": "300",
+        "SAME_START_SECTOR": "true",
+        "GAME_THREADS": "1",
+        "SERVER_LISTED": "true",
+        "SERVER_BETA": "false",
+        "APP_ID": "565060",
+        "LD_LIBRARY_PATH": "./linux64",
+        "STEAM_MASTER_PORT": "27021",
+        "STEAM_QUERY_PORT": "27020",
+        "QUERY_PORT": "27003"
+    },
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": gaming,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
+list.assettocorsa = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 4,
+    "egg": 54,
+    "docker_image": "quay.io/parkervcp/pterodactyl-images:ubuntu_source",
+    "startup": './acServer',
+    "limits": {
+        "memory": 2048,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {
+        "STEAM_USER": null,
+        "STEAM_PASS": null,
+        "STEAM_AUTH": null,
+        "HOSTNAME": "DBH hosted Assetto Corsa server.",
+        "PASSWORD": null,
+        "ADMIN_PASSWORD": getPassword(),
+        "HTTP_PORT": "8081"
+    },
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": gaming,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
+list.arma = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 4,
+    "egg": 53,
+    "docker_image": "quay.io/parkervcp/pterodactyl-images:game_arma3",
+    "startup": './{{SERVER_BINARY}} -ip=0.0.0.0 -port={{SERVER_PORT}} -profiles=./serverprofile -bepath=./battleye -cfg=\\"{{BASIC}}\\" -config=\\"{{CONFIG}}\\" -mod=\\"{{MODIFICATIONS}}\\" -serverMod=\\"{{SERVERMODS}}\\" {{STARTUP_PARAMS}}',
+    "limits": {
+        "memory": 2048,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {
+        "STEAMCMD_APPID": "233780",
+        "STEAM_USER": "your_steam_username",
+        "STEAM_PASS": "your_steam_password",
+        "SERVER_BINARY": "arma3server_x64",
+        "STARTUP_PARAMS": "-noLogs",
+        "CONFIG": "server.cfg",
+        "BASIC": "basic.cfg",
+        "MODIFICATIONS": null,
+        "SERVERMODS": null,
+        "UPDATE_SERVER": 0,
+        "UPDATE_WORKSHOP": null,
+        "MODS_LOWERCASE": 0,
+        "STEAMCMD_EXTRA_FLAGS": null,
+        "HC_NUM": "0",
+        "HC_PASSWORD": null,
+    },
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": gaming,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
+list.daystodie = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 4,
+    "egg": 52,
+    "docker_image": "quay.io/parkervcp/pterodactyl-images:ubuntu_source",
+    "startup": './7DaysToDieServer.x86_64 -configfile=serverconfig.xml -quit -batchmode -nographics -dedicated -ServerPort=${SERVER_PORT} -ServerMaxPlayerCount=${MAX_PLAYERS} -GameDifficulty=${GAME_DIFFICULTY} -ControlPanelEnabled=false -TelnetEnabled=true -TelnetPort=8081 -logfile logs/latest.log & echo -e "Checing on telnet connection" && until nc -z -v -w5 127.0.0.1 8081; do echo "Waiting for telnet connection..."; sleep 5; done && telnet -E 127.0.0.1 8081',
+    "limits": {
+        "memory": 2048,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {
+        "MAX_PLAYERS": "8",
+        "GAME_DIFFICULTY": "2",
+        "SRCDS_APPID": "294420",
+        "AUTO_UPDATE": "1",
+        "LD_LIBRARY_PATH": "."
+    },
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": gaming,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
 list.rust = (serverName, userID) => ({
     "name": serverName,
     "user": userID,
@@ -932,6 +1226,42 @@ list.postgres = (serverName, userID) => ({
     "oom_disabled": false
 })
 
+/*
+
+Custom servers
+
+ShareX
+
+*/
+list.sharex = (serverName, userID) => ({
+    "name": serverName,
+    "user": userID,
+    "nest": 17,
+    "egg": 62,
+    "docker_image": "quay.io/parkervcp/pterodactyl-images:debian_nodejs-12",
+    "startup": `/usr/local/bin/node /home/container/src/index.js`,
+    "limits": {
+        "memory": 0,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0
+    },
+    "environment": {
+    },
+    "feature_limits": {
+        "databases": 2,
+        "allocations": 1,
+        "backups": 10
+    },
+    "deploy": {
+        "locations": botswebdb,
+        "dedicated_ip": false,
+        "port_range": []
+    },
+    "start_on_completion": false,
+    "oom_disabled": false
+})
 
 let data = (serverName, userID) => {
     let toReturn = {
@@ -959,7 +1289,16 @@ let data = (serverName, userID) => {
         rust: null,
         mongodb: null,
         redis: null,
-        postgres: null
+        postgres: null,
+        daystodie: null,
+        arma: null,
+        assettocorsa: null,
+        avorion: null,
+        barotrauma: null,
+        waterfall: null,
+        spigot: null,
+        lavalink: null,
+        sharex: null
     };
 
     for (let [name, filled] of Object.entries(list)) {

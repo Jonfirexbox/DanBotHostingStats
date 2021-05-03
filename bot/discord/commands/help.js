@@ -4,11 +4,11 @@ const commands = {
         user: "See help for that command.",
         server: "See help for that command.",
         stats: "Shows the stats of each hosting node.",
+        ping: "Shows the bots ping.",
         ticket: "Create a ticket for help from the staff team!.",
         uptime: "Shows the bots uptime.",
         vc: "Manage you custom voice channel.",
         info: "Get a bots info.",
-        suggest: "Get the link to send in suggestions.",
         animalapi: "Check out our animal api."
     },
     Staff: {
@@ -20,7 +20,6 @@ const commands = {
     Owner: {
         reload: "Reloads all commands on the bot.",
         'staff update': "Pull latest git commit.",
-        say: "Says what you want it to say.",
         eval: "Eval some code.",
         exec: "Run some system commands.",
         giveaway: "Launch a giveaway.",

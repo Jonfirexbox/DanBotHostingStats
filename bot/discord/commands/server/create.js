@@ -11,17 +11,18 @@ exports.run = async (client, message, args) => {
     }*/
 
     let helpEmbed = new Discord.MessageEmbed()
-        .setColor(`RED`).setDescription(`List of servers: (use ${config.DiscordBot.Prefix}server create <type> <name>)`)
-        .addField(`__**Minecraft:**__`, "Forge \nPaper \nBedrock \nPocketmineMP", true)
-        .addField(`__**Grand Theft Auto:**__`, "FiveM \nalt:V \nmultitheftauto \nRage.MP \nSA-MP", true)
-        .addField(`__**Bots:**__`, "NodeJS \nPython \nJava \naio \nRedDiscordBot", true)
-        .addField(`__**Source Engine:**__`, "GMod \nCS:GO \nARK:SE", true)
-        .addField(`__**Voice Servers:**__`, "TS3 \nMumble", true)
-        .addField(`__**SteamCMD:**__`, "Rust", true)
-        .addField(`__**Databases:**__`, "MongoDB \nRedis \nPostgres", true)
-        .addField(`__**WebHosting:**__`, "Nginx", true)
-        //.addField(`__**Storage:**__`, "storage", true)
-        .setFooter("Example: " + config.DiscordBot.Prefix + "server create NodeJS Testing Server")
+        .setColor("RED").setDescription(`List of servers: (use DBH!server create <type> <name>)\n\n*Please note that some nodes might be having trouble connecting to the bot which may lead into this process giving out an error.*\n`)
+        .addField("__**Minecraft:**__", "Forge \nPaper \nBedrock \nPocketmineMP \nWaterfall \nSpigot", true)
+        .addField("__**Grand Theft Auto:**__", "FiveM \nalt:V \nmultitheftauto \nRage.MP \nSA-MP", true)
+        .addField("__**Bots:**__", "NodeJS \nPython \nJava \naio \nRedDiscordBot", true)
+        .addField("__**Source Engine:**__", "GMod \nCS:GO \nARK:SE", true)
+        .addField("__**Voice Servers:**__", "TS3 \nMumble \nLavalink", true)
+        .addField("__**SteamCMD:**__", "Rust \nDaystodie \nArma \nAssettocorsa \nAvorion \nBarotrauma", true)
+        .addField("__**Databases:**__", "MongoDB \nRedis \nPostgres", true)
+        .addField("__**WebHosting:**__", "Nginx", true)
+        .addField("__**Custom Egg:**__", "ShareX", true)
+        //.addField(__**Storage:**__, "storage", true)
+        .setFooter("Example: DBH!server create NodeJS Testing Server")
 
     const serverName = message.content.split(' ').slice(3).join(' ') || "change me! (Settings -> SERVER NAME)";
     let consoleID = userData.get(message.author.id);
@@ -66,14 +67,23 @@ exports.run = async (client, message, args) => {
         mongodb: data.mongodb,
         redis: data.redis,
         postgres: data.postgres,
+        daystodie: data.daystodie,
+        arma: data.arma,
+        assettocorsa: data.assettocorsa,
+        avorion: data.avorion,
+        barotrauma: data.barotrauma,
+        waterfall: data.waterfall,
+        spigot: data.spigot,
+        lavalink: data.lavalink,
+        sharex: data.sharex
     }
 
     if (Object.keys(types).includes(args[1].toLowerCase())) {
-/*
-        if (client.cooldown[message.author.id].nCreate > Date.now()) {
-            message.reply(`You're currently on cooldown, please wait ${humanizeDuration(client.cooldown[message.author.id].nCreate - Date.now(), {round: true})}`)
-            return;
-        }*/
+
+                /*if (client.cooldown[message.author.id].nCreate > Date.now()) {
+                    message.reply(`You're currently on cooldown, please wait ${humanizeDuration(client.cooldown[message.author.id].nCreate - Date.now(), {round: true})}`)
+                    return;
+                }*/
         //client.cooldown[message.author.id].nCreate = Date.now() + (1200 * 1000)
 
         if (args[1] === "aio" | args[1] === "java") {
@@ -98,6 +108,12 @@ exports.run = async (client, message, args) => {
                         .setColor('RED')
                         .addField(`__**Failed to create a new server**__`, `The node is currently offline or having issues, You can check the status of the node in this channel: <#757949242495991918>`)
                     message.reply(embed)
+                    console.log(error)
+                } else if (error == "Error: Request failed with status code 429") {
+                    const embed = new Discord.MessageEmbed()
+                        .setColor('RED')
+                        .addField(`__**Failed to create a new server**__`, `Uh oh, This shouldn\'t happen, Try again.`)
+                    message.reply(embed)
                 } else {
                     const embed = new Discord.MessageEmbed()
                         .setColor('RED')
@@ -116,22 +132,27 @@ exports.run = async (client, message, args) => {
                         .addField(`__**Type:**__`, args[1].toLowerCase())
                     message.reply(embed)
                 }).catch(error => {
-                    if (error == "Error: Request failed with status code 400") {
-                        const embed = new Discord.MessageEmbed()
-                            .setColor('RED')
-                            .addField(`__**Failed to create a new server**__`, `The node is currently full, Please check <#738530520945786921> for updates. \nIf there is no updates please alert one of the Panel admins (Dan or Solo)`)
-                        message.reply(embed)
-                    } else if (error == "Error: Request failed with status code 504") {
-                        const embed = new Discord.MessageEmbed()
-                            .setColor('RED')
-                            .addField(`__**Failed to create a new server**__`, `The node is currently offline or having issues, You can check the status of the node in this channel: <#757949242495991918>`)
-                        message.reply(embed)
-                    } else {
-                        const embed = new Discord.MessageEmbed()
-                            .setColor('RED')
-                            .addField(`__**Failed to create a new server**__`, error)
-                        message.reply(embed)
-                    }
+                if (error == "Error: Request failed with status code 400") {
+                    const embed = new Discord.MessageEmbed()
+                        .setColor('RED')
+                        .addField(`__**Failed to create a new server**__`, `The node is currently full, Please check <#738530520945786921> for updates. \nIf there is no updates please alert one of the Panel admins (Dan or Solo)`)
+                    message.reply(embed)
+                } else if (error == "Error: Request failed with status code 504") {
+                    const embed = new Discord.MessageEmbed()
+                        .setColor('RED')
+                        .addField(`__**Failed to create a new server**__`, `The node is currently offline or having issues, You can check the status of the node in this channel: <#757949242495991918>`)
+                    message.reply(embed)
+                } else if (error == "Error: Request failed with status code 429") {
+                    const embed = new Discord.MessageEmbed()
+                        .setColor('RED')
+                        .addField(`__**Failed to create a new server**__`, `Uh oh, This shouldn\'t happen, Try again.`)
+                    message.reply(embed)
+                } else {
+                    const embed = new Discord.MessageEmbed()
+                        .setColor('RED')
+                        .addField(`__**Failed to create a new server**__`, error)
+                    message.reply(embed)
+                }
                 client.cooldown[message.author.id].nCreate = Date.now() + (10 * 1000)
             })
         }
